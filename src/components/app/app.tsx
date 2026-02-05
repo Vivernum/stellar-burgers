@@ -1,4 +1,4 @@
-import { ConstructorPage } from '@pages';
+import { ConstructorPage, Feed } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
 
@@ -20,6 +20,7 @@ const App = () => {
       <AppHeader />
       <Routes>
         <Route path='/' element={<ConstructorPage />} />
+        <Route path='/feed' element={<Feed />} />
       </Routes>
     </div>
   );
