@@ -6,12 +6,14 @@ export type FeedsState = {
   orders: TOrder[];
   total: number;
   totalToday: number;
+  currentOrder: TOrder | null;
 };
 
 export const initialState: FeedsState = {
   orders: [],
   total: 0,
-  totalToday: 0
+  totalToday: 0,
+  currentOrder: null
 };
 
 export const feedsSlice = createSlice({
@@ -22,6 +24,14 @@ export const feedsSlice = createSlice({
       state.orders = [];
       state.total = 0;
       state.totalToday = 0;
+    },
+    setCurrentOrder: (state, action: { payload: number | undefined }) => {
+      if (!action.payload) return;
+      const order = state.orders.find(
+        (order) => order.number === action.payload
+      );
+      if (order) state.currentOrder = order;
+      else state.currentOrder = null;
     }
   },
   selectors: {
@@ -37,7 +47,8 @@ export const feedsSlice = createSlice({
         totalToday: state.totalToday
       };
       return feeds;
-    }
+    },
+    selectCurrentOrder: (state: FeedsState) => state.currentOrder
   },
   extraReducers: (builder) => {
     builder
@@ -52,5 +63,6 @@ export const feedsSlice = createSlice({
   }
 });
 
-export const { selectFeeds, selectFeedsStats } = feedsSlice.selectors;
-export const { clearFeeds } = feedsSlice.actions;
+export const { selectFeeds, selectFeedsStats, selectCurrentOrder } =
+  feedsSlice.selectors;
+export const { clearFeeds, setCurrentOrder } = feedsSlice.actions;

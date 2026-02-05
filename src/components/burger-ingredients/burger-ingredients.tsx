@@ -7,7 +7,6 @@ import { AppDispatch, useDispatch, useSelector } from '../../services/store';
 import { selectIngredients } from '../../services/ingredients/slice';
 
 import { fitlerIngredientsByType } from '../../utils/filterIngredientsByType';
-import { addBun } from '../../services/burger-constructor/slice';
 
 export const BurgerIngredients: FC = () => {
   /** TODO: взять переменные из стора */
@@ -15,8 +14,6 @@ export const BurgerIngredients: FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const [buns, mains, sauces] = fitlerIngredientsByType(ingredients);
-
-  if (buns.length !== 0) dispatch(addBun(buns[0]));
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);

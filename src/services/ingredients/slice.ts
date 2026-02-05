@@ -4,18 +4,34 @@ import { getIngredients } from './actions';
 
 export type IngredientsState = {
   ingredients: TIngredient[];
+  currentIngredient: TIngredient | null;
 };
 
 export const initialState: IngredientsState = {
-  ingredients: []
+  ingredients: [],
+  currentIngredient: null
 };
 
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentIngredient: (state, action: { payload: string | undefined }) => {
+      const ingredient = state.ingredients.find(
+        (ingredient) => ingredient._id === action.payload
+      );
+      if (ingredient) state.currentIngredient = ingredient;
+      else state.currentIngredient = null;
+    }
+  },
   selectors: {
-    selectIngredients: (state) => state.ingredients
+    selectIngredients: (state) => state.ingredients,
+    selectCurrentIngredient: (state) => {
+      const ingredient = state.ingredients.find(
+        (ingredient) => ingredient._id === state.currentIngredient?._id
+      );
+      return ingredient;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -28,4 +44,8 @@ export const ingredientsSlice = createSlice({
   }
 });
 
-export const { selectIngredients } = ingredientsSlice.selectors;
+export const {
+  selectIngredients,
+  selectCurrentIngredient: selectIngredientsById
+} = ingredientsSlice.selectors;
+export const { setCurrentIngredient } = ingredientsSlice.actions;
