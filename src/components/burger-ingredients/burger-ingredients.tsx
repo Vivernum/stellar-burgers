@@ -3,18 +3,20 @@ import { useInView } from 'react-intersection-observer';
 
 import { TIngredient, TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
-import { useSelector } from '../../services/store';
+import { AppDispatch, useDispatch, useSelector } from '../../services/store';
 import { selectIngredients } from '../../services/ingredients/slice';
 
 import { fitlerIngredientsByType } from '../../utils/filterIngredientsByType';
+import { addBun } from '../../services/burger-constructor/slice';
 
 export const BurgerIngredients: FC = () => {
   /** TODO: взять переменные из стора */
   const ingredients: TIngredient[] = useSelector(selectIngredients);
+  const dispatch: AppDispatch = useDispatch();
 
-  const buns = [...fitlerIngredientsByType(ingredients, 'bun')];
-  const mains = [...fitlerIngredientsByType(ingredients, 'main')];
-  const sauces = [...fitlerIngredientsByType(ingredients, 'sauce')];
+  const [buns, mains, sauces] = fitlerIngredientsByType(ingredients);
+
+  if (buns.length !== 0) dispatch(addBun(buns[0]));
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);
