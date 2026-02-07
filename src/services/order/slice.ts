@@ -4,27 +4,45 @@ import { getOrders, orderBurger } from './actions';
 
 export type OrderState = {
   orderRequest: boolean;
-  orderModalData: TOrder | null;
   orders: TOrder[] | null;
+  orderModalData: TOrder | null;
+  currentOrder: TOrder | null;
 };
 
-const initialState = {
+const initialState: OrderState = {
   orderRequest: false,
-  orders: null
+  orders: null,
+  orderModalData: null,
+  currentOrder: null
 };
 
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentOrder: (state, action: { payload: number | undefined }) => {
+      if (!action.payload) return;
+      const order = state.orders!.find(
+        (order) => order.number === action.payload
+      );
+      if (order) state.currentOrder = order;
+      else state.currentOrder = null;
+    },
+    closeModal: (state) => {
+      state.orderModalData = null;
+      state.orderRequest = false;
+    }
+  },
   selectors: {
     selectOrderRequest: (state) => state.orderRequest,
+    selectOrderModalData: (state) => state.orderModalData,
     selectOrders: (state) => {
       if (!state.orders) {
         return [];
       }
       return state.orders;
-    }
+    },
+    selectCurrentOrderAlt: (state) => state.currentOrder
   },
   extraReducers: (builder) =>
     builder
@@ -33,6 +51,7 @@ export const orderSlice = createSlice({
       })
       .addCase(orderBurger.fulfilled, (state, action) => {
         state.orderRequest = false;
+        state.orderModalData = action.payload.order;
       })
       .addCase(orderBurger.rejected, (state) => {
         state.orderRequest = false;
@@ -46,4 +65,7 @@ export const orderSlice = createSlice({
       })
 });
 
-export const { selectOrderRequest, selectOrders } = orderSlice.selectors;
+export const { selectOrderRequest, selectOrders, selectOrderModalData } =
+  orderSlice.selectors;
+
+export const { setCurrentOrder, closeModal } = orderSlice.actions;

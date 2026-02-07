@@ -7,7 +7,7 @@ import {
   selectCurrentOrder,
   setCurrentOrder
 } from '../../services/feeds/slice';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { selectIngredients } from '../../services/ingredients/slice';
 
 export const OrderInfo: FC = () => {

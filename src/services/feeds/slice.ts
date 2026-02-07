@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { getFeeds } from './actions';
+import { getFeeds, getOrderByNumber } from './actions';
 
 export type FeedsState = {
   orders: TOrder[];
