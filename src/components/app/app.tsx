@@ -3,6 +3,7 @@ import {
   Feed,
   ForgotPassword,
   Login,
+  NotFound404,
   Profile,
   ProfileOrders,
   Register,
@@ -19,7 +20,7 @@ import { getIngredients } from '../../services/ingredients/actions';
 import { ProtectedRoute } from '../protectedRoute/ProtectedRoute';
 import { getUser } from '../../services/user/actions';
 import { getCookie } from '../../utils/cookie';
-import { setIsAuthChecked, setUser } from '../../services/user/slice';
+import { setIsAuthChecked } from '../../services/user/slice';
 
 const App = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -32,7 +33,6 @@ const App = () => {
     getCookie('accessToken')
       ? dispatch(getUser())
       : dispatch(setIsAuthChecked());
-    // dispatch(setUser());
   }, []);
 
   const handleCloseModal = () => {
@@ -44,10 +44,19 @@ const App = () => {
     <div className={styles.app}>
       <AppHeader />
       <Routes location={background || location}>
+        <Route path='*' element={<NotFound404 />} />
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path='/profile'
           element={
@@ -112,6 +121,16 @@ const App = () => {
             <Modal title='Детали заказа' onClose={handleCloseModal}>
               <OrderInfo />
             </Modal>
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <Modal title='Детали заказа' onClose={handleCloseModal}>
+                <OrderInfo />
+              </Modal>
+            </ProtectedRoute>
           }
         />
       </Routes>

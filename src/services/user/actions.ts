@@ -24,10 +24,6 @@ export const logoutUser = createAsyncThunk('user/logoutUser', async () =>
   logoutApi()
 );
 
-export const restoreToken = createAsyncThunk('user/restoreToken', async () =>
-  refreshToken()
-);
-
 export const getUser = createAsyncThunk('user/getUser', async () =>
   getUserApi()
 );
