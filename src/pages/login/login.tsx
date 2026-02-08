@@ -17,7 +17,7 @@ export const Login: FC = () => {
     loginUserApi({ email, password })
       .then((res) => {
         dispatch(setUser(res.user));
-        setCookie('access_token', res.accessToken);
+        setCookie('accessToken', res.accessToken);
         localStorage.setItem('refreshToken', res.refreshToken);
       })
       .catch((err) => {

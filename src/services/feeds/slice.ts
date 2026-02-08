@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { getFeeds, getOrderByNumber } from './actions';
+import { getFeeds } from './actions';
 
 export type FeedsState = {
   orders: TOrder[];
@@ -25,7 +25,7 @@ export const feedsSlice = createSlice({
       state.total = 0;
       state.totalToday = 0;
     },
-    setCurrentOrder: (state, action: { payload: number | undefined }) => {
+    setCurrentOrderFeed: (state, action: { payload: number | undefined }) => {
       if (!action.payload) return;
       const order = state.orders.find(
         (order) => order.number === action.payload
@@ -58,11 +58,11 @@ export const feedsSlice = createSlice({
         state.totalToday = action.payload.totalToday;
       })
       .addCase(getFeeds.rejected, (state) => {
-        alert('error');
+        console.log('error');
       });
   }
 });
 
 export const { selectFeeds, selectFeedsStats, selectCurrentOrder } =
   feedsSlice.selectors;
-export const { clearFeeds, setCurrentOrder } = feedsSlice.actions;
+export const { clearFeeds, setCurrentOrderFeed } = feedsSlice.actions;

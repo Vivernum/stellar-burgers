@@ -11,6 +11,7 @@ export const ProfileOrders: FC = () => {
   useEffect(() => {
     dispatch(getOrders());
   }, []);
+
   /** TODO: взять переменную из стора */
   const orders: TOrder[] = useSelector(selectOrders);
 

@@ -1,33 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { getOrders } from './actions';
+import { getOrderByNumber, getOrders } from './actions';
 
 export type OrderState = {
   orderRequest: boolean;
   orders: TOrder[] | null;
   orderModalData: TOrder | null;
-  currentOrder: TOrder | null;
+  ordersByNumber: TOrder | null;
 };
 
 const initialState: OrderState = {
   orderRequest: false,
   orders: null,
   orderModalData: null,
-  currentOrder: null
+  ordersByNumber: null
 };
 
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    setCurrentOrder: (state, action: { payload: number | undefined }) => {
-      if (!action.payload) return;
-      const order = state.orders!.find(
-        (order) => order.number === action.payload
-      );
-      if (order) state.currentOrder = order;
-      else state.currentOrder = null;
-    },
     setOrderRequest: (state, action: { payload: boolean }) => {
       state.orderRequest = action.payload;
     },
@@ -48,7 +40,7 @@ export const orderSlice = createSlice({
       }
       return state.orders;
     },
-    selectCurrentOrderAlt: (state) => state.currentOrder
+    selectOrderByNumber: (state) => state.ordersByNumber
   },
   extraReducers: (builder) =>
     builder
@@ -56,12 +48,27 @@ export const orderSlice = createSlice({
         state.orders = action.payload;
       })
       .addCase(getOrders.rejected, (state) => {
-        alert('orders error');
+        console.log('orders error');
+      })
+
+      .addCase(getOrderByNumber.pending, (state) => {
+        state.orderRequest = true;
+      })
+      .addCase(getOrderByNumber.fulfilled, (state, action) => {
+        state.ordersByNumber = action.payload.orders[0];
+        state.orderRequest = false;
+      })
+      .addCase(getOrderByNumber.rejected, (state) => {
+        console.log('order by number error');
+        state.orderRequest = false;
       })
 });
 
-export const { selectOrderRequest, selectOrders, selectOrderModalData } =
-  orderSlice.selectors;
+export const {
+  selectOrderRequest,
+  selectOrders,
+  selectOrderModalData,
+  selectOrderByNumber
+} = orderSlice.selectors;
 
-export const { setCurrentOrder, closeModal, setOrderRequest, setOrders } =
-  orderSlice.actions;
+export const { closeModal, setOrderRequest, setOrders } = orderSlice.actions;
