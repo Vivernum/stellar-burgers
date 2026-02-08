@@ -26,6 +26,17 @@ export const burgerConstructorSlice = createSlice({
         (ingredient) => ingredient.type !== 'sauce'
       );
       state.ingredients.push(action.payload);
+    },
+    removeIngredient: (state, action: { payload: string }) => {
+      const index = state.ingredients.findIndex(
+        (ingredient: TIngredient) => ingredient._id === action.payload
+      );
+
+      state.ingredients.splice(index, 1);
+    },
+    clearConstructor: (state) => {
+      state.bun = null;
+      state.ingredients = [];
     }
   },
   selectors: {
@@ -33,6 +44,11 @@ export const burgerConstructorSlice = createSlice({
   }
 });
 
-export const { addIngredient, addBun, addSauce } =
-  burgerConstructorSlice.actions;
+export const {
+  addIngredient,
+  addBun,
+  addSauce,
+  clearConstructor,
+  removeIngredient
+} = burgerConstructorSlice.actions;
 export const { selectBurgerConstructor } = burgerConstructorSlice.selectors;

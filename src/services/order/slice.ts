@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { getOrders, orderBurger } from './actions';
+import { getOrders } from './actions';
 
 export type OrderState = {
   orderRequest: boolean;
@@ -28,6 +28,12 @@ export const orderSlice = createSlice({
       if (order) state.currentOrder = order;
       else state.currentOrder = null;
     },
+    setOrderRequest: (state, action: { payload: boolean }) => {
+      state.orderRequest = action.payload;
+    },
+    setOrders: (state, action: { payload: TOrder }) => {
+      state.orderModalData = action.payload;
+    },
     closeModal: (state) => {
       state.orderModalData = null;
       state.orderRequest = false;
@@ -46,17 +52,6 @@ export const orderSlice = createSlice({
   },
   extraReducers: (builder) =>
     builder
-      .addCase(orderBurger.pending, (state) => {
-        state.orderRequest = true;
-      })
-      .addCase(orderBurger.fulfilled, (state, action) => {
-        state.orderRequest = false;
-        state.orderModalData = action.payload.order;
-      })
-      .addCase(orderBurger.rejected, (state) => {
-        state.orderRequest = false;
-      })
-
       .addCase(getOrders.fulfilled, (state, action) => {
         state.orders = action.payload;
       })
@@ -68,4 +63,5 @@ export const orderSlice = createSlice({
 export const { selectOrderRequest, selectOrders, selectOrderModalData } =
   orderSlice.selectors;
 
-export const { setCurrentOrder, closeModal } = orderSlice.actions;
+export const { setCurrentOrder, closeModal, setOrderRequest, setOrders } =
+  orderSlice.actions;

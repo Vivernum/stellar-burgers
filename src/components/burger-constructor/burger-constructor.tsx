@@ -2,15 +2,20 @@ import { FC, useMemo } from 'react';
 import { TIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { AppDispatch, useDispatch, useSelector } from '../../services/store';
-import { selectBurgerConstructor } from '../../services/burger-constructor/slice';
+import {
+  clearConstructor,
+  selectBurgerConstructor
+} from '../../services/burger-constructor/slice';
 import {
   closeModal,
   selectOrderModalData,
-  selectOrderRequest
+  selectOrderRequest,
+  setOrderRequest,
+  setOrders
 } from '../../services/order/slice';
-import { orderBurger } from '../../services/order/actions';
 import { selectUser } from '../../services/user/slice';
 import { useNavigate } from 'react-router-dom';
+import { orderBurgerApi } from '@api';
 
 export const BurgerConstructor: FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -36,7 +41,16 @@ export const BurgerConstructor: FC = () => {
     constructorItems.ingredients.forEach((item: TIngredient) => {
       order.push(item._id);
     });
-    dispatch(orderBurger(order));
+
+    dispatch(setOrderRequest(true));
+    orderBurgerApi(order)
+      .then((res) => {
+        dispatch(setOrders(res.order));
+        dispatch(clearConstructor());
+      })
+      .finally(() => {
+        dispatch(setOrderRequest(false));
+      });
   };
 
   const closeOrderModal = () => {
