@@ -2,7 +2,9 @@ import { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ProfileMenuUI } from '@ui';
 import { AppDispatch, useDispatch } from '../../services/store';
-import { logoutUser } from '../../services/user/actions';
+import { logoutApi } from '@api';
+import { logout, setIsRequestPending } from '../../services/user/slice';
+import { deleteCookie } from '../../utils/cookie';
 
 export const ProfileMenu: FC = () => {
   const { pathname } = useLocation();
@@ -10,7 +12,19 @@ export const ProfileMenu: FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logoutUser());
+    dispatch(setIsRequestPending(true));
+    logoutApi()
+      .then(() => {
+        dispatch(logout());
+        deleteCookie('accessToken');
+        localStorage.clear();
+      })
+      .catch((err) => {
+        alert('logout error' + err.message);
+      })
+      .finally(() => {
+        dispatch(setIsRequestPending(false));
+      });
     navigate(pathname);
   };
 
