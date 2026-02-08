@@ -6,7 +6,10 @@ import { AppDispatch, useDispatch, useSelector } from '../../services/store';
 import { useParams } from 'react-router-dom';
 import { selectIngredients } from '../../services/ingredients/slice';
 import { getOrderByNumber } from '../../services/order/actions';
-import { selectOrderByNumber } from '../../services/order/slice';
+import {
+  selectOrderByNumber,
+  selectOrderRequest
+} from '../../services/order/slice';
 
 export const OrderInfo: FC = () => {
   const number = Number(useParams().number);
@@ -19,6 +22,8 @@ export const OrderInfo: FC = () => {
   const orderData = useSelector(selectOrderByNumber);
 
   const ingredients: TIngredient[] = useSelector(selectIngredients);
+
+  const isPending = useSelector(selectOrderRequest);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
@@ -62,7 +67,7 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo) {
+  if (isPending || !orderInfo) {
     return <Preloader />;
   }
 
