@@ -15,12 +15,13 @@ import styles from './app.module.css';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { AppDispatch, useDispatch } from '../../services/store';
+import { AppDispatch, useDispatch, useSelector } from '../../services/store';
 import { getIngredients } from '../../services/ingredients/actions';
 import { ProtectedRoute } from '../protectedRoute/ProtectedRoute';
 import { getUser } from '../../services/user/actions';
 import { getCookie } from '../../utils/cookie';
 import { setIsAuthChecked } from '../../services/user/slice';
+import { selectIngredients } from '../../services/ingredients/slice';
 
 const App = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -34,6 +35,11 @@ const App = () => {
       ? dispatch(getUser())
       : dispatch(setIsAuthChecked());
   }, []);
+
+  // честно, я не понимаю, почему оно работает, но вызов этого селектора решает проблему
+  // я просто хотел проверить, что происходит со стором при перезагрузке, и вывел стейт
+  // со списком игредиентов в консоль, но это сработало, поэтому вот -
+  const ingredients = useSelector(selectIngredients);
 
   const handleCloseModal = () => {
     if (!background) navigate('/');
