@@ -39,7 +39,7 @@ const App = () => {
   // честно, я не понимаю, почему оно работает, но вызов этого селектора решает проблему
   // я просто хотел проверить, что происходит со стором при перезагрузке, и вывел стейт
   // со списком игредиентов в консоль, но это сработало, поэтому вот -
-  const ingredients = useSelector(selectIngredients);
+  useSelector(selectIngredients);
 
   const handleCloseModal = () => {
     if (!background) navigate('/');
