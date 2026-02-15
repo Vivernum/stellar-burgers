@@ -9,7 +9,7 @@ export type FeedsState = {
   currentOrder: TOrder | null;
 };
 
-export const initialState: FeedsState = {
+const initialState: FeedsState = {
   orders: [],
   total: 0,
   totalToday: 0,
