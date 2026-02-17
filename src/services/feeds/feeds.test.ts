@@ -1,21 +1,7 @@
-import { AsyncThunkAction, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { feedsSlice } from './slice';
-import * as fakeAPI from './actions';
-import { json } from 'stream/consumers';
-
-// describe('bullshit tests', () => {
-//   test('bullshit', async () => {
-//     const mock = jest
-//       .spyOn(someAPI, 'fakeAPI')
-//       .mockImplementation(() => Promise.resolve({ success: true }));
-
-//     const result = await someAPI.fakeAPI();
-
-//     expect(result).toEqual({
-//       success: true
-//     });
-//   });
-// });
+import { getFeeds } from './actions';
+import * as burgerAPI from '../../utils/burger-api';
 
 describe('Тесты слайса [feeds]', () => {
   const initialFeedsState = {
@@ -90,15 +76,81 @@ describe('Тесты слайса [feeds]', () => {
     totalToday: 6
   };
 
+  describe('Проверка настройки редьюсера [feeds]', () => {
+    test('Редюсер должен вернуть начальное состояние при получении неизвестного экшена', () => {
+      const newState = feedsSlice.reducer(undefined, {
+        type: 'UNKNOWN_ACTION'
+      });
+
+      expect(newState).toEqual(initialFeedsState);
+    });
+  });
+
   describe('Проверка асинхронного экшена [getFeeds]', () => {
     test('Проверка получения заказов [getFeeds.fulfilled]', async () => {
-      const mock = jest.spyOn(fakeAPI, 'getFeeds').mockImplementation();
+      const mock = jest
+        .spyOn(burgerAPI, 'getFeedsApi')
+        .mockImplementation(() =>
+          Promise.resolve({ ...expectedResult, success: true })
+        );
 
-      await store.dispatch(fakeAPI.getFeeds());
+      await store.dispatch(getFeeds());
 
       const state = store.getState().feeds;
 
       expect(state).toEqual({ ...expectedResult, currentOrder: null });
+    });
+  });
+
+  describe('Проверка селекторов и редьюсеров [getFeeds]', () => {
+    test('Проверка редьюсера для установки текущего заказа (невалидный номер) [setCurrentOrder]', () => {
+      store.dispatch(feedsSlice.actions.setCurrentOrderFeed(0));
+
+      const { currentOrder } = store.getState().feeds;
+
+      expect(currentOrder).toBeNull();
+    });
+
+    test('Проверка редьюсера для установки текущего заказа (валидный номер) [setCurrentOrder]', () => {
+      store.dispatch(feedsSlice.actions.setCurrentOrderFeed(101044));
+
+      const { currentOrder } = store.getState().feeds;
+
+      expect(currentOrder).toEqual(expectedResult.orders[3]);
+    });
+
+    test('Проверка селектора получения текущего заказа [selectCurrentOrder]', () => {
+      expect(feedsSlice.selectors.selectCurrentOrder(store.getState())).toEqual(
+        expectedResult.orders[3]
+      );
+    });
+
+    test('Проверка селектора получения заказов (заказы есть в сторе) [selectOrders]', () => {
+      expect(feedsSlice.selectors.selectFeeds(store.getState())).toEqual(
+        expectedResult.orders
+      );
+    });
+
+    test('Проверка селектора получения статистики заказов [selectFeedsStats]', () => {
+      expect(feedsSlice.selectors.selectFeedsStats(store.getState())).toEqual({
+        total: expectedResult.total,
+        totalToday: expectedResult.totalToday
+      });
+    });
+
+    test('Проверка редьюсера очистки заказов [clearFeeds]', () => {
+      store.dispatch(feedsSlice.actions.clearFeeds());
+
+      const state = store.getState().feeds;
+
+      expect(state).toEqual({
+        ...initialFeedsState,
+        currentOrder: expectedResult.orders[3]
+      });
+    });
+
+    test('Проверка селектора получения заказов (заказов нет в сторе) [selectOrders]', () => {
+      expect(feedsSlice.selectors.selectFeeds(store.getState())).toEqual([]);
     });
   });
 });

@@ -2,54 +2,54 @@ import { configureStore } from '@reduxjs/toolkit';
 import { burgerConstructorSlice } from './slice';
 import { bunData, mainData, sauceData } from '../ingredientsData';
 
-const initialConstructorState = {
-  bun: null,
-  ingredients: []
-};
-
-const store = configureStore({
-  reducer: {
-    burgerConstructor: burgerConstructorSlice.reducer
-  }
-});
-
-afterAll(() => {
-  store.dispatch(burgerConstructorSlice.actions.clearConstructor());
-});
-
-const expectedResult = [
-  {
-    _id: '643d69a5c3f7b9001cfa0941',
-    name: 'Биокотлета из марсианской Магнолии',
-    type: 'main',
-    proteins: 420,
-    fat: 142,
-    carbohydrates: 242,
-    calories: 4242,
-    price: 424,
-    image: 'https://code.s3.yandex.net/react/code/meat-01.png',
-    image_mobile: 'https://code.s3.yandex.net/react/code/meat-01-mobile.png',
-    image_large: 'https://code.s3.yandex.net/react/code/meat-01-large.png',
-    __v: 0
-  },
-  {
-    _id: '643d69a5c3f7b9001cfa093e',
-    name: 'Филе Люминесцентного тетраодонтимформа',
-    type: 'main',
-    proteins: 44,
-    fat: 26,
-    carbohydrates: 85,
-    calories: 643,
-    price: 988,
-    image: 'https://code.s3.yandex.net/react/code/meat-03.png',
-    image_mobile: 'https://code.s3.yandex.net/react/code/meat-03-mobile.png',
-    image_large: 'https://code.s3.yandex.net/react/code/meat-03-large.png',
-    __v: 0
-  }
-];
-
 describe('Тесты слайса [burger-constructor]', () => {
-  describe('Тесты редьюсеров [burger-constructor]', () => {
+  const initialConstructorState = {
+    bun: null,
+    ingredients: []
+  };
+
+  const store = configureStore({
+    reducer: {
+      burgerConstructor: burgerConstructorSlice.reducer
+    }
+  });
+
+  afterAll(() => {
+    store.dispatch(burgerConstructorSlice.actions.clearConstructor());
+  });
+
+  const expectedResult = [
+    {
+      _id: '643d69a5c3f7b9001cfa0941',
+      name: 'Биокотлета из марсианской Магнолии',
+      type: 'main',
+      proteins: 420,
+      fat: 142,
+      carbohydrates: 242,
+      calories: 4242,
+      price: 424,
+      image: 'https://code.s3.yandex.net/react/code/meat-01.png',
+      image_mobile: 'https://code.s3.yandex.net/react/code/meat-01-mobile.png',
+      image_large: 'https://code.s3.yandex.net/react/code/meat-01-large.png',
+      __v: 0
+    },
+    {
+      _id: '643d69a5c3f7b9001cfa093e',
+      name: 'Филе Люминесцентного тетраодонтимформа',
+      type: 'main',
+      proteins: 44,
+      fat: 26,
+      carbohydrates: 85,
+      calories: 643,
+      price: 988,
+      image: 'https://code.s3.yandex.net/react/code/meat-03.png',
+      image_mobile: 'https://code.s3.yandex.net/react/code/meat-03-mobile.png',
+      image_large: 'https://code.s3.yandex.net/react/code/meat-03-large.png',
+      __v: 0
+    }
+  ];
+
+  describe('Проверка настройки редьюсера [burger-constructor]', () => {
     test('Редюсер должен вернуть начальное состояние при получении неизвестного экшена', () => {
       const newState = burgerConstructorSlice.reducer(undefined, {
         type: 'UNKNOWN_ACTION'
@@ -57,7 +57,9 @@ describe('Тесты слайса [burger-constructor]', () => {
 
       expect(newState).toEqual(initialConstructorState);
     });
+  });
 
+  describe('Тесты редьюсеров [burger-constructor]', () => {
     test('Проверка добавления ингредиентов [addIngredient]', () => {
       store.dispatch(burgerConstructorSlice.actions.addIngredient(mainData[0]));
       store.dispatch(burgerConstructorSlice.actions.addIngredient(mainData[1]));
