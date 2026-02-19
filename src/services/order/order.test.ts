@@ -93,7 +93,7 @@ describe('Тесты слайса [order]', () => {
     totalToday: 6
   };
 
-  describe('Проверка настройки редьюсера [feeds]', () => {
+  describe('Проверка настройки редьюсера [order]', () => {
     test('Редюсер должен вернуть начальное состояние при получении неизвестного экшена', () => {
       const newState = orderSlice.reducer(undefined, {
         type: 'UNKNOWN_ACTION'

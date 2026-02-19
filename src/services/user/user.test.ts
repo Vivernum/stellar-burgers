@@ -45,6 +45,16 @@ describe('Тесты слайса [user]', () => {
     }
   };
 
+  describe('Проверка настройки редьюсера [user]', () => {
+    test('Редюсер должен вернуть начальное состояние при получении неизвестного экшена', () => {
+      const newState = userSlice.reducer(undefined, {
+        type: 'UNKNOWN_ACTION'
+      });
+
+      expect(newState).toEqual(initialUserState);
+    });
+  });
+
   describe('Проверка асинхронных экшенов [user]', () => {
     test('Проверка экшена получения данных пользователя [getUser]', async () => {
       const mock = jest
