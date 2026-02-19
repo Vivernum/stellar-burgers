@@ -1,4 +1,8 @@
-import { getUserApi, TRegisterData, updateUserApi } from '@api';
+import {
+  getUserApi,
+  TRegisterData,
+  updateUserApi
+} from '../../utils/burger-api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const getUser = createAsyncThunk('user/getUser', async () =>
