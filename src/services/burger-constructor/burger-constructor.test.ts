@@ -1,13 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { burgerConstructorSlice } from './slice';
+import { burgerConstructorSlice, initialState } from './slice';
 import { bunData, mainData, sauceData } from '../ingredientsData';
 
 describe('Тесты слайса [burger-constructor]', () => {
-  const initialConstructorState = {
-    bun: null,
-    ingredients: []
-  };
-
   const store = configureStore({
     reducer: {
       burgerConstructor: burgerConstructorSlice.reducer
@@ -55,7 +50,7 @@ describe('Тесты слайса [burger-constructor]', () => {
         type: 'UNKNOWN_ACTION'
       });
 
-      expect(newState).toEqual(initialConstructorState);
+      expect(newState).toEqual(initialState);
     });
   });
 
@@ -116,7 +111,7 @@ describe('Тесты слайса [burger-constructor]', () => {
 
       const state = store.getState().burgerConstructor;
 
-      expect(state).toEqual(initialConstructorState);
+      expect(state).toEqual(initialState);
     });
   });
 

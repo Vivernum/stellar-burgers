@@ -1,16 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { feedsSlice } from './slice';
+import { feedsSlice, initialState } from './slice';
 import { getFeeds } from './actions';
 import * as burgerAPI from '../../utils/burger-api';
 
 describe('Тесты слайса [feeds]', () => {
-  const initialFeedsState = {
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    currentOrder: null
-  };
-
   const store = configureStore({
     reducer: {
       feeds: feedsSlice.reducer
@@ -82,7 +75,7 @@ describe('Тесты слайса [feeds]', () => {
         type: 'UNKNOWN_ACTION'
       });
 
-      expect(newState).toEqual(initialFeedsState);
+      expect(newState).toEqual(initialState);
     });
   });
 
@@ -144,7 +137,7 @@ describe('Тесты слайса [feeds]', () => {
       const state = store.getState().feeds;
 
       expect(state).toEqual({
-        ...initialFeedsState,
+        ...initialState,
         currentOrder: expectedResult.orders[3]
       });
     });

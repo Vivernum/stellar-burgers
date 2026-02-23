@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import {
   closeModal,
+  initialState,
   orderSlice,
   selectOrderByNumber,
   selectOrderModalData,
@@ -14,20 +15,6 @@ import * as burgerAPI from '../../utils/burger-api';
 import { getOrders, getOrderByNumber } from './actions';
 
 describe('Тесты слайса [order]', () => {
-  type TInitialOrderState = {
-    orderRequest: boolean;
-    orders: TOrder[] | null;
-    orderModalData: TOrder | null;
-    ordersByNumber: TOrder | null;
-  };
-
-  const initialOrderState: TInitialOrderState = {
-    orderRequest: false,
-    orders: null,
-    orderModalData: null,
-    ordersByNumber: null
-  };
-
   const store = configureStore({
     reducer: {
       order: orderSlice.reducer
@@ -99,7 +86,7 @@ describe('Тесты слайса [order]', () => {
         type: 'UNKNOWN_ACTION'
       });
 
-      expect(newState).toEqual(initialOrderState);
+      expect(newState).toEqual(initialState);
     });
   });
 

@@ -1,15 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { ingredientsSlice } from './slice';
+import { ingredientsSlice, initialState } from './slice';
 import * as burgerAPI from '../../utils/burger-api';
 import { getIngredients } from './actions';
 
 describe('Тесты слайса [ingredients]', () => {
-  const initialIngredientsState = {
-    ingredients: [],
-    currentIngredient: null,
-    isIngredientsLoading: false
-  };
-
   const store = configureStore({
     reducer: {
       ingredients: ingredientsSlice.reducer
@@ -81,7 +75,7 @@ describe('Тесты слайса [ingredients]', () => {
         type: 'UNKNOWN_ACTION'
       });
 
-      expect(newState).toEqual(initialIngredientsState);
+      expect(newState).toEqual(initialState);
     });
   });
 

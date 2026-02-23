@@ -3,6 +3,7 @@ import * as burgerAPI from '../../utils/burger-api';
 import { getUser, updateUser } from './actions';
 import { configureStore } from '@reduxjs/toolkit';
 import {
+  initialState,
   logout,
   selectIsAuthChecked,
   selectPendingStatus,
@@ -13,18 +14,6 @@ import {
 } from './slice';
 
 describe('Тесты слайса [user]', () => {
-  type TUserState = {
-    user: TUser | null;
-    isAuthChecked: boolean;
-    isRequestPending: boolean;
-  };
-
-  const initialUserState: TUserState = {
-    user: null,
-    isAuthChecked: false,
-    isRequestPending: false
-  };
-
   const store = configureStore({
     reducer: {
       user: userSlice.reducer
@@ -51,7 +40,7 @@ describe('Тесты слайса [user]', () => {
         type: 'UNKNOWN_ACTION'
       });
 
-      expect(newState).toEqual(initialUserState);
+      expect(newState).toEqual(initialState);
     });
   });
 

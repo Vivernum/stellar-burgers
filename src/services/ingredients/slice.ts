@@ -8,7 +8,7 @@ export type IngredientsState = {
   isIngredientsLoading: boolean;
 };
 
-const initialState: IngredientsState = {
+export const initialState: IngredientsState = {
   ingredients: [],
   currentIngredient: null,
   isIngredientsLoading: false

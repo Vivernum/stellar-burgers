@@ -8,7 +8,7 @@ type UserState = {
   isRequestPending: boolean;
 };
 
-const initialState: UserState = {
+export const initialState: UserState = {
   user: null,
   isAuthChecked: false,
   isRequestPending: false
