@@ -1,0 +1,17 @@
+{
+  "success": "true",
+  "name": "Order",
+  "order": {
+    "createdAt": "2026-02-23T07:19:47.543Z",
+    "updatedAt": "2026-02-23T07:19:47.773Z",
+    "_id": "699bff93a64177001b32d055",
+    "status": "done",
+    "number": 101049,
+    "ingredients": [
+      "643d69a5c3f7b9001cfa093d",
+      "643d69a5c3f7b9001cfa0941",
+      "643d69a5c3f7b9001cfa093d"
+    ],
+    "name": "Био-марсианский флюоресцентный бургер"
+  }
+}
