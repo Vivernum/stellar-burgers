@@ -9,7 +9,7 @@ export type OrderState = {
   ordersByNumber: TOrder | null;
 };
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   orderRequest: false,
   orders: null,
   orderModalData: null,

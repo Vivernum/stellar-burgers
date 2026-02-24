@@ -19,7 +19,12 @@ export const ingredientsSlice = createSlice({
   initialState,
   reducers: {
     setCurrentIngredient: (state, action: { payload: string | undefined }) => {
-      const ingredient = state.ingredients.find(
+      // пришлось сделать так, потому что jest жаловался на то, что state.ingredients
+      // не является массивом WritableDraft<IngredientsState>
+      // и к нему нельзя применить метод find
+      const ingredients = state.ingredients;
+      const arr = [...ingredients];
+      const ingredient = arr.find(
         (ingredient) => ingredient._id === action.payload
       );
       if (ingredient) state.currentIngredient = ingredient;

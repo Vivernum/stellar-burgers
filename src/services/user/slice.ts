@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { getUser, updateUser } from './actions';
 
-export type UserState = {
+type UserState = {
   user: TUser | null;
   isAuthChecked: boolean;
   isRequestPending: boolean;
